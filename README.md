@@ -9,7 +9,7 @@ Introduction
 Quick Start
 -----------
 
->Six steps to use SRCFOLDER generate code you want.
+>Use SRCFOLDER to generate code you want.
 
 1. Choose Transformation Templates and apply to current package. 
 2. Type into source file or import a file or zip file.
