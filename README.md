@@ -4,7 +4,7 @@ SRCFOLDER
 Introduction
 ------------
 
->[SRCFOLDER](http://scrfolder.com) a code transformation online tool, it parses source file and invoke transformation functions to generate target file into different format or syntax. User can modify the transformation functions to get the expected code.   
+>[SRCFOLDER](http://srcfolder.com) a code transformation online tool, it parses source file and invoke transformation functions to generate target file into different format or syntax. User can modify the transformation functions to get the expected code.   
 
 Quick Start
 -----------
