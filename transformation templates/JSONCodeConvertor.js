@@ -92,9 +92,13 @@
 			if(node==null) return "";
 			var str='';
 			str+=node.get("OPENBRACE").getValue();
+			this.tabCount++;
+			str+=this.addLineBreak();
 			if(node.has("ObjectMembers")){
 				str+=this.encodeMembers(node.get("ObjectMembers").get("Members"));
 			}
+			this.tabCount--;
+			str+=this.addLineBreak();
 			str+=node.get("CLOSEBRACE").getValue();
 			return str;
 			},
@@ -147,9 +151,13 @@
 			if(node==null) return "";
 			var str='';
 			str+=node.get("OPENBRACKET").getValue();
+			this.tabCount++;
+			str+=this.addLineBreak();
 			if(node.has("ArrayElements")){
 				str+=this.encodeElements(node.get("ArrayElements").get("Elements"));
 			}
+			this.tabCount--;
+			str+=this.addLineBreak();
 			str+=node.get("CLOSEBRACKET").getValue();
 			return str;
 			},
@@ -162,6 +170,7 @@
 			str+=this.encodeElementsValue(node.get("ElementsValue"));
 			if(node.has("ElementsMore")){
 				str+=node.get("ElementsMore").get("ElementsCOMMA").getValue();
+				str+=this.addLineBreak();
 				str+=this.encodeElementsMoreElements(node.get("ElementsMore").get("ElementsMoreElements"));
 			}
 			return str;

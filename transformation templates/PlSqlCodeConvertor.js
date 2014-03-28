@@ -229,6 +229,9 @@
 		{
 		name:"mapKeyWord",
 		body:function(str){
+		    if(str===";") {
+		        return ";"+this.addLineBreak();
+		    }
 			return str;
 			},
 		},
@@ -568,8 +571,7 @@
 				str+=this.getKeyWord("REAL",node.get("BasicDataTypeREAL"));
 			} else if(node.has("BasicDataTypeFLOAT")){
 				str+=this.getKeyWord("FLOAT",node.get("BasicDataTypeFLOAT"));
-			}
-			if(node.has("BasicDataTypeDECIMAL")){
+			} else if(node.has("BasicDataTypeDECIMAL")){
 				str+=this.getKeyWord("(");
 				str+=node.get("BasicDataTypeDECIMAL").get("BasicDataTypeDECIMAL_Part1").getValue();
 				if(node.get("BasicDataTypeDECIMAL").has("BasicDataTypeDECIMAL_Part2")){
@@ -577,8 +579,7 @@
 					str+=node.get("BasicDataTypeDECIMAL").get("BasicDataTypeDECIMAL_Part2").get("BasicDataTypeDECIMAL_Part3").getValue();
 				}
 				str+=this.getKeyWord(")");
-			}
- else if(node.has("BasicDataTypeDATE")){
+			} else if(node.has("BasicDataTypeDATE")){
 				str+=this.getKeyWord("DATE",node.get("BasicDataTypeDATE"));
 			} else if(node.has("BasicDataTypeBINARYINTEGER")){
 				str+=this.getKeyWord("BINARY_INTEGER",node.get("BasicDataTypeBINARYINTEGER"));
