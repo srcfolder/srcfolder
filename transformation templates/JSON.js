@@ -74,14 +74,32 @@
 			},
 		},
 		{
+		name:"encodeNode",
+		body:function(nodeName, node){
+			var str='';
+			if(eval("this.encode"+nodeName+"__Start")){
+				str+=eval("this.encode"+nodeName+"__Start(node)");
+			}
+			if(eval("this.encode"+nodeName+"__Body")){
+				str+=eval("this.encode"+nodeName+"__Body(node)");
+			} else {
+				str+=eval("this.encode"+nodeName+"(node)");
+			}
+			if(eval("this.encode"+nodeName+"__End")){
+				str+=eval("this.encode"+nodeName+"__End(node)");
+			}
+			return str;
+			},
+		},
+		{
 		name:"encodeCompilationUnit",
 		body:function(node){
 			if(node==null) return "";
 			var str='';
 			if(node.has("Object")){
-				str+=this.encodeObject(node.get("Object"));
+				str+=this.encodeNode("Object",node.get("Object"));
 			} else if(node.has("Array")){
-				str+=this.encodeArray(node.get("Array"));
+				str+=this.encodeNode("Array",node.get("Array"));
 			}
 			return str;
 			},
@@ -91,15 +109,11 @@
 		body:function(node){
 			if(node==null) return "";
 			var str='';
-			str+=node.get("OPENBRACE").getValue();
-			this.tabCount++;
-			str+=this.addLineBreak();
+			str+=this.getKeyWord(node.get("OPENBRACE").getValue(),node);
 			if(node.has("ObjectMembers")){
-				str+=this.encodeMembers(node.get("ObjectMembers").get("Members"));
+				str+=this.encodeNode("Members",node.get("ObjectMembers").get("Members"));
 			}
-			this.tabCount--;
-			str+=this.addLineBreak();
-			str+=node.get("CLOSEBRACE").getValue();
+			str+=this.getKeyWord(node.get("CLOSEBRACE").getValue(),node);
 			return str;
 			},
 		},
@@ -108,10 +122,10 @@
 		body:function(node){
 			if(node==null) return "";
 			var str='';
-			str+=this.encodePair(node.get("Pair"));
+			str+=this.encodeNode("Pair",node.get("Pair"));
 			if(node.has("MembersMore")){
-				str+=node.get("MembersMore").get("MembersCOMMA").getValue();
-				str+=this.encodeMembersMoreMembers(node.get("MembersMore").get("MembersMoreMembers"));
+				str+=this.getKeyWord(node.get("MembersMore").get("MembersCOMMA").getValue(),node.get("MembersMore"));
+				str+=this.encodeNode("MembersMoreMembers",node.get("MembersMore").get("MembersMoreMembers"));
 			}
 			return str;
 			},
@@ -121,7 +135,7 @@
 		body:function(node){
 			if(node==null) return "";
 			var str='';
-			str+=this.encodeMembers(node.get("Members"));
+			str+=this.encodeNode("Members",node.get("Members"));
 			return str;
 			},
 		},
@@ -130,9 +144,9 @@
 		body:function(node){
 			if(node==null) return "";
 			var str='';
-			str+=node.get("PairName").getValue();
-			str+=node.get("PairOpt").getValue();
-			str+=this.encodePairValue(node.get("PairValue"));
+			str+=this.getKeyWord(node.get("PairName").getValue(),node);
+			str+=this.getKeyWord(node.get("PairOpt").getValue(),node);
+			str+=this.encodeNode("PairValue",node.get("PairValue"));
 			return str;
 			},
 		},
@@ -141,7 +155,7 @@
 		body:function(node){
 			if(node==null) return "";
 			var str='';
-			str+=this.encodeValue(node.get("Value"));
+			str+=this.encodeNode("Value",node.get("Value"));
 			return str;
 			},
 		},
@@ -150,15 +164,11 @@
 		body:function(node){
 			if(node==null) return "";
 			var str='';
-			str+=node.get("OPENBRACKET").getValue();
-			this.tabCount++;
-			str+=this.addLineBreak();
+			str+=this.getKeyWord(node.get("OPENBRACKET").getValue(),node);
 			if(node.has("ArrayElements")){
-				str+=this.encodeElements(node.get("ArrayElements").get("Elements"));
+				str+=this.encodeNode("Elements",node.get("ArrayElements").get("Elements"));
 			}
-			this.tabCount--;
-			str+=this.addLineBreak();
-			str+=node.get("CLOSEBRACKET").getValue();
+			str+=this.getKeyWord(node.get("CLOSEBRACKET").getValue(),node);
 			return str;
 			},
 		},
@@ -167,11 +177,10 @@
 		body:function(node){
 			if(node==null) return "";
 			var str='';
-			str+=this.encodeElementsValue(node.get("ElementsValue"));
+			str+=this.encodeNode("ElementsValue",node.get("ElementsValue"));
 			if(node.has("ElementsMore")){
-				str+=node.get("ElementsMore").get("ElementsCOMMA").getValue();
-				str+=this.addLineBreak();
-				str+=this.encodeElementsMoreElements(node.get("ElementsMore").get("ElementsMoreElements"));
+				str+=this.getKeyWord(node.get("ElementsMore").get("ElementsCOMMA").getValue(),node.get("ElementsMore"));
+				str+=this.encodeNode("ElementsMoreElements",node.get("ElementsMore").get("ElementsMoreElements"));
 			}
 			return str;
 			},
@@ -181,7 +190,7 @@
 		body:function(node){
 			if(node==null) return "";
 			var str='';
-			str+=this.encodeValue(node.get("Value"));
+			str+=this.encodeNode("Value",node.get("Value"));
 			return str;
 			},
 		},
@@ -190,7 +199,7 @@
 		body:function(node){
 			if(node==null) return "";
 			var str='';
-			str+=this.encodeElements(node.get("Elements"));
+			str+=this.encodeNode("Elements",node.get("Elements"));
 			return str;
 			},
 		},
@@ -200,19 +209,19 @@
 			if(node==null) return "";
 			var str='';
 			if(node.has("Object")){
-				str+=this.encodeObject(node.get("Object"));
+				str+=this.encodeNode("Object",node.get("Object"));
 			} else if(node.has("Array")){
-				str+=this.encodeArray(node.get("Array"));
+				str+=this.encodeNode("Array",node.get("Array"));
 			} else if(node.has("ValueString")){
-				str+=node.get("ValueString").getValue();
+				str+=this.getKeyWord(node.get("ValueString").getValue(),node.get("ValueString"));
 			} else if(node.has("ValueNumber")){
-				str+=node.get("ValueNumber").getValue();
+				str+=this.getKeyWord(node.get("ValueNumber").getValue(),node.get("ValueNumber"));
 			} else if(node.has("ValueTrue")){
-				str+=node.get("ValueTrue").getValue();
+				str+=this.getKeyWord(node.get("ValueTrue").getValue(),node.get("ValueTrue"));
 			} else if(node.has("ValueFalse")){
-				str+=node.get("ValueFalse").getValue();
+				str+=this.getKeyWord(node.get("ValueFalse").getValue(),node.get("ValueFalse"));
 			} else if(node.has("ValueNull")){
-				str+=node.get("ValueNull").getValue();
+				str+=this.getKeyWord(node.get("ValueNull").getValue(),node.get("ValueNull"));
 			}
 			return str;
 			},
