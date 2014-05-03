@@ -27,16 +27,24 @@ User Guide
 
 * #### File 
  
-  File is a program file. User can manually input the code or import an existing source code file. To do bulk import, all the source files need to be compressed as a zip file first and then import it. User can edit the source file to preview target file, when no transformation fnctions exists in the package, the target file is a copy of source file. if any syntax error occurs. the source file will not be able to be parsed and the target file will be empty.
+  File is a program file. User can manually input the code or import an existing source code file. To do bulk import, all the source files need to be compressed as a zip file first and then import it. User can edit the source file to preview target file, when no transformation functions exists in the package, the target file is a copy of source file. if any syntax error occurs. the source file will not be able to be parsed and the target file will be empty.
 
-* #### Tranformation Functions 
+* #### Transformation Functions 
  
-  Tranformation Functions is a set of javascript functions to tranform the source code. SRCFOLDER will parse the source file into a tree structure, and it will be passed into the functions, the functions will return a new code string as target file. the functions can be modified and exported as template to be reused by other packages. 
-The Tranformation Functions is in JSON format, it will be converted as javascript Object when doing tranformation. To invoke another function such as 'encodeXXX', it need to be written as 'this.encodeXXX'. Some functions and variables exist in all the templates provided by SRCFOLDER. To understand how Tranformation Functions work, you need have experience of javascript, while it is easy to understand the functions. To debug the Tranformation Functions in Goggle Chrome, you can add breakpoint with 'debugger;'.
+  Transformation Functions is a set of javascript functions to transform the source code. SRCFOLDER will parse the source file into a tree structure, and it will be passed into the functions, the functions will return a new code string as target file. the functions can be modified and exported as template to be reused by other packages. 
+The Transformation Functions is in JSON format, it will be converted as javascript Object when doing tranformation. Some functions and variables exist in all the templates provided by SRCFOLDER. To understand how Transformation Functions work, you need have experience of javascript, while it is easy to understand the functions. Transformation Functions is readonly, you need to add your functions into Customizing Functions to change the target files output.
+
+* #### Customizing Functions 
+
+  Customizing Functions overload Transformation Functions by the function encodeXXXX__Body and callback functions encodeXXXX__Start and encodeXXXX__End to be invoked before and after encodeXXXX function to be invoked. To invoke another node encode function, it need to be written as 'this.encodeNode('nodeName', node)' . To debug the Transformation Functions in Google Chrome, you can add breakpoint with 'debugger;'. Please find the PLSQL Formatter and JSON Formatter for more reference.
 
   **encode**
 
   It is the entry point of the transformation functions. it will trigger a set of encode functions and the order of function invocation is based on the syntax and source file. the parameter of the function is the root of tree structure of the source file. You can add 'debugger;' at the begining of this function in Google Chrome to see how it works.
+  
+  **encodeNode**
+
+  It is the function encode each syntax tree node. it checks if the __Body, __Start and __End function exist and call them or call default encode function.
   
   **getKeyWord**
 
